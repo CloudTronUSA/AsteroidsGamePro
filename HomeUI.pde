@@ -1,16 +1,16 @@
 // HomeUI
 
 // preload image assets
-/* @pjs preload="https://cloudtronusa.github.io/AsteroidsGamePro/data/homeui_background_image.png"; */
-/* @pjs preload="https://cloudtronusa.github.io/AsteroidsGamePro/data/homeui_character_button.png"; */
-/* @pjs preload="https://cloudtronusa.github.io/AsteroidsGamePro/data/homeui_character_button_hover.png"; */
-/* @pjs preload="https://cloudtronusa.github.io/AsteroidsGamePro/data/homeui_character_default_idle.png"; */
-/* @pjs preload="https://cloudtronusa.github.io/AsteroidsGamePro/data/homeui_forge_button.png"; */
-/* @pjs preload="https://cloudtronusa.github.io/AsteroidsGamePro/data/homeui_forge_button_hover.png"; */
-/* @pjs preload="https://cloudtronusa.github.io/AsteroidsGamePro/data/homeui_settings_button.png"; */
-/* @pjs preload="https://cloudtronusa.github.io/AsteroidsGamePro/data/homeui_settings_button_hover.png"; */
-/* @pjs preload="https://cloudtronusa.github.io/AsteroidsGamePro/data/homeui_start_button.png"; */
-/* @pjs preload="https://cloudtronusa.github.io/AsteroidsGamePro/data/homeui_start_button_hover.png"; */
+/* @pjs preload="data/homeui_background_image.png"; */
+/* @pjs preload="data/homeui_character_button.png"; */
+/* @pjs preload="data/homeui_character_button_hover.png"; */
+/* @pjs preload="data/homeui_character_default_idle.png"; */
+/* @pjs preload="data/homeui_forge_button.png"; */
+/* @pjs preload="data/homeui_forge_button_hover.png"; */
+/* @pjs preload="data/homeui_settings_button.png"; */
+/* @pjs preload="data/homeui_settings_button_hover.png"; */
+/* @pjs preload="data/homeui_start_button.png"; */
+/* @pjs preload="data/homeui_start_button_hover.png"; */
 
 class HomeUI {
 	private PImage bg_img;
@@ -29,7 +29,7 @@ class HomeUI {
 	
 	public HomeUI() {
 		// initiate the ui
-		bg_img = loadImage("https://cloudtronusa.github.io/AsteroidsGamePro/data/homeui_background_image.png");
+		bg_img = loadImage("data/homeui_background_image.png");
 		
 		// load the buttons
 		startButton = new Button(30, 30, 600, 200, "data/homeui_start_button.png", "data/homeui_start_button_hover.png");
