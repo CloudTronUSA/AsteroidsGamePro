@@ -1,16 +1,16 @@
 // HomeUI
 
 // preload image assets
-/* @pjs preload="data/homeui_background_image.png"; */
-/* @pjs preload="data/homeui_character_button.png"; */
-/* @pjs preload="data/homeui_character_button_hover.png"; */
-/* @pjs preload="data/homeui_character_default_idle.png"; */
-/* @pjs preload="data/homeui_forge_button.png"; */
-/* @pjs preload="data/homeui_forge_button_hover.png"; */
-/* @pjs preload="data/homeui_settings_button.png"; */
-/* @pjs preload="data/homeui_settings_button_hover.png"; */
-/* @pjs preload="data/homeui_start_button.png"; */
-/* @pjs preload="data/homeui_start_button_hover.png"; */
+/* @pjs preload="https://cloudtronusa.github.io/AsteroidsGamePro/data/homeui_background_image.png"; */
+/* @pjs preload="https://cloudtronusa.github.io/AsteroidsGamePro/data/homeui_character_button.png"; */
+/* @pjs preload="https://cloudtronusa.github.io/AsteroidsGamePro/data/homeui_character_button_hover.png"; */
+/* @pjs preload="https://cloudtronusa.github.io/AsteroidsGamePro/data/homeui_character_default_idle.png"; */
+/* @pjs preload="https://cloudtronusa.github.io/AsteroidsGamePro/data/homeui_forge_button.png"; */
+/* @pjs preload="https://cloudtronusa.github.io/AsteroidsGamePro/data/homeui_forge_button_hover.png"; */
+/* @pjs preload="https://cloudtronusa.github.io/AsteroidsGamePro/data/homeui_settings_button.png"; */
+/* @pjs preload="https://cloudtronusa.github.io/AsteroidsGamePro/data/homeui_settings_button_hover.png"; */
+/* @pjs preload="https://cloudtronusa.github.io/AsteroidsGamePro/data/homeui_start_button.png"; */
+/* @pjs preload="https://cloudtronusa.github.io/AsteroidsGamePro/data/homeui_start_button_hover.png"; */
 
 class HomeUI {
 	private PImage bg_img;
