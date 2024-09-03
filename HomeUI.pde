@@ -29,7 +29,7 @@ class HomeUI {
 	
 	public HomeUI() {
 		// initiate the ui
-		bg_img = loadImage("data/homeui_background_image.png");
+		bg_img = loadImage("https://cloudtronusa.github.io/AsteroidsGamePro/data/homeui_background_image.png");
 		
 		// load the buttons
 		startButton = new Button(30, 30, 600, 200, "data/homeui_start_button.png", "data/homeui_start_button_hover.png");
