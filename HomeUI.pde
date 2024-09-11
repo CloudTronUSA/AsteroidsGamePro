@@ -1,17 +1,5 @@
 // HomeUI
 
-// preload image assets
-/* @pjs preload="data/homeui_background_image.png"; */
-/* @pjs preload="data/homeui_character_button.png"; */
-/* @pjs preload="data/homeui_character_button_hover.png"; */
-/* @pjs preload="data/homeui_character_default_idle.png"; */
-/* @pjs preload="data/homeui_forge_button.png"; */
-/* @pjs preload="data/homeui_forge_button_hover.png"; */
-/* @pjs preload="data/homeui_settings_button.png"; */
-/* @pjs preload="data/homeui_settings_button_hover.png"; */
-/* @pjs preload="data/homeui_start_button.png"; */
-/* @pjs preload="data/homeui_start_button_hover.png"; */
-
 class HomeUI {
 	private PImage bg_img;
 	
@@ -23,7 +11,7 @@ class HomeUI {
 	public UiImage characterImage;
 	public UiImage featureUnavailableText;
 	
-	private float hideUnavailableTextAfter = 0f;
+	private double hideUnavailableTextAfter = 0;
 
 	public boolean shouldStartGame = false;
 	

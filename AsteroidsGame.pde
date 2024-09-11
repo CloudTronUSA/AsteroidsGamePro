@@ -8,6 +8,9 @@
 /* @pjs preload="data/homeui_settings_button_hover.png"; */
 /* @pjs preload="data/homeui_start_button.png"; */
 /* @pjs preload="data/homeui_start_button_hover.png"; */
+/* @pjs preload="data/game_player_spaceship.png"; */
+/* @pjs preload="data/game_asteroid_a.png"; */
+/* @pjs preload="data/game_effect_bullet.png"; */
 
 // Main Class
 HomeUI homeUi;
@@ -48,3 +51,24 @@ void mouseClicked() {
 	}
 }
 
+void keyPressed() {
+	switch (gameState) {
+		case 0:
+			// do nothing
+			break;
+		case 1:
+			game.onKeyPressed();
+			break;
+	}
+}
+
+void keyReleased() {
+	switch (gameState) {
+		case 0:
+			// do nothing
+			break;
+		case 1:
+			game.onKeyReleased();
+			break;
+	}
+}
