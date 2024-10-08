@@ -2,10 +2,31 @@
 
 class Player extends Floater {
 	public double speed = 8;
-	public double damage = 8;
+	public double damage = 80;
+	public double maxHp = 400;
+	public double maxEnergy = 100;
+
+	public double hp = maxHp;
+	public double energy = maxEnergy;
+	public boolean isDead = false;
+
+	public double dmgCooldown = 200;	// how long the cooldown will be 
+	private double dmgCooldownUntil = 0;
+
+	public double atkCooldown = 100;	// how long the cooldown will be
+	public double atkCooldownUntil = 0;
+
+	public double energyRechargeRate = 0.1; // how much ER per frame
+	public double ultAttackCost = 24; // how much energy the ult atk cost
+	public double ultAtkCooldown = 500;	// how long the cooldown will be
+	public double ultAtkCooldownUntil = 0;
+
+	public double collisionDetectionDistance;
 	
 	public Player(double posXInp, double posYInp, int sizeXInp, int sizeYInp, String imagePath) {
 		super(posXInp, posYInp, sizeXInp, sizeYInp, imagePath);
+		
+		collisionDetectionDistance = (super.sizeX+super.sizeY) / 4	// half of the size (Radius)
 	}
 	
 	public double getRelativeAngleToMouse() {
@@ -17,6 +38,36 @@ class Player extends Floater {
 		angle += 90;
 		
 		return angle;
+	}
+
+	public void takeDamage(double damage) {
+		if (millis() > dmgCooldownUntil) {
+			dmgCooldownUntil = millis() + dmgCooldown;
+			
+			hp -= damage;
+			//println("PLAYER DAMAGE Taken!");
+			if (hp <= 0) {
+				hp = 0;
+				isDead = true;
+			}
+		}
+	}
+
+	public void approveAttack() {
+		if (millis() > atkCooldownUntil) {
+			atkCooldownUntil = millis() + atkCooldown;
+			return true;
+		}
+		return false;
+	}
+
+	public void approveUltAttack() {
+		if (millis() > ultAtkCooldownUntil && energy - ultAttackCost >= 0) {
+			ultAtkCooldownUntil = millis() + ultAtkCooldown;
+			energy -= ultAttackCost;
+			return true;
+		}
+		return false;
 	}
 	
 	public void updatePlayer(double inputXAxis, double inputYAxis) {
@@ -42,6 +93,14 @@ class Player extends Floater {
 		// move by key
 		super.fTranslate(speed*inputXAxis, speed*inputYAxis*-1, true);
 		
+		if (energy + energyRechargeRate <= maxEnergy)
+			energy += energyRechargeRate;
+		
+		if (millis() < dmgCooldownUntil) {
+			tint(255, (int)(150));
+			//println("Player TINT!");
+		}
 		super.update();
+		noTint();
 	}
 } 

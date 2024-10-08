@@ -1,24 +1,17 @@
-/* @pjs preload="data/homeui_background_image.png"; */
-/* @pjs preload="data/homeui_character_button.png"; */
-/* @pjs preload="data/homeui_character_button_hover.png"; */
-/* @pjs preload="data/homeui_character_default_idle.png"; */
-/* @pjs preload="data/homeui_forge_button.png"; */
-/* @pjs preload="data/homeui_forge_button_hover.png"; */
-/* @pjs preload="data/homeui_settings_button.png"; */
-/* @pjs preload="data/homeui_settings_button_hover.png"; */
-/* @pjs preload="data/homeui_start_button.png"; */
-/* @pjs preload="data/homeui_start_button_hover.png"; */
-/* @pjs preload="data/game_player_spaceship.png"; */
-/* @pjs preload="data/game_asteroid_a.png"; */
-/* @pjs preload="data/game_effect_bullet.png"; */
+// preload ALL assets that are necessary to boot (must be in one line)
+/* @pjs preload="data/homeui_background_image.png"; font="data/PixelifySans-Regular.ttf, data/PixelifySans-Bold.ttf" */
 
 // Main Class
+
 HomeUI homeUi;
 Game game;
+
 int gameState = 0;	// 0 = ui, 1 = play
+int targetFPS = 60;	// target fps
 
 public void setup(){
   size(1280, 720);
+	frameRate(targetFPS);
   
 	homeui = new HomeUI();
 	game = new Game();
@@ -27,15 +20,24 @@ public void setup(){
 }
 
 public void draw(){
-	if (homeui.shouldStartGame)
+	if (homeui.shouldStartGame){
 		gameState = 1;
+		homeui.shouldStartGame = false;
+	}
 	
+	if (game.isGameOver) {
+		game = new Game();
+		gameState = 0;
+	}
+
 	switch (gameState) {
 		case 0:
 			homeui.update();
 			break;
 		case 1:
 			game.update();
+			break;
+		case 2:
 			break;
 	}
 }

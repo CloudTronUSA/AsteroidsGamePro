@@ -1,29 +1,54 @@
 class Input {
-	public double xAxis;
-	public double yAxis;
+	public double xAxis = 0;
+	public double yAxis = 0;
+	public boolean fire = false;
+	
+	public boolean isLeft = false;
+	public boolean isRight = false;
+	public boolean isUp = false;
+	public boolean isDown = false;
 	
 	public Input() {
+	}
+
+	public void updateInput() {
 		xAxis = 0;
 		yAxis = 0;
+		if (isUp)
+			yAxis = 1;
+		if (isDown)
+			yAxis = -1;
+		if (isLeft)
+			xAxis = 1;
+		if (isRight)
+			xAxis = -1;
 	}
 	
 	public void onKeyPressed() {
 		//println('pressed!');
 		if (key == 'w')
-			yAxis = 1;
+			isUp = true;
 		if (key == 's')
-			yAxis = -1;
+			isDown = true;
 		if (key == 'd')
-			xAxis = 1;
+			isLeft = true;
 		if (key == 'a')
-			xAxis = -1;
+			isRight = true;
+		if (keyCode == 32)
+			fire = true;
 	}
 	
 	public void onKeyReleased() {
 		//println('released!');
-		if ((key == 'w' || key == 's') && yAxis != 0)
-			yAxis = 0;
-		if ((key == 'd' || key == 'a') && xAxis != 0)
-			xAxis = 0;
+		if (key == 'w')
+			isUp = false;
+		if (key == 's')
+			isDown = false;
+		if (key == 'd')
+			isLeft = false;
+		if (key == 'a')
+			isRight = false;
+		if (keyCode == 32)
+			fire = false;
 	}
 }

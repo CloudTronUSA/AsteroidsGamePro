@@ -1,7 +1,8 @@
 class Asteroid extends Floater {
 	public double speed = 2;
 	public double collisionDetectionDistance;
-	public double hp = 16;
+	public double hp = 160;
+	public double damage = 16;
 
 	private double movementPerTickX;
 	private double movementPerTickY;
@@ -11,8 +12,8 @@ class Asteroid extends Floater {
 	public double dmgCooldown = 100;	// how long the cooldown will be 
 	private double dmgCooldownUntil = 0;
 
-	public bool isDead = false;
-	private double hpMax = hp;
+	public boolean isDead = false;
+	public double hpMax;
 
 	public Asteroid() {
 		super(0, 0, 100, 76, 0, 0, "data/game_asteroid_a.png");
@@ -45,6 +46,8 @@ class Asteroid extends Floater {
 		super.sizeY = super.sizeY * scale;
 				
 		hp = hp * scale;
+		hpMax = hp;
+		damage = damage * scale;
 				
 		collisionDetectionDistance = (super.sizeX+super.sizeY) / 4	// half of the size (Radius)
 	}
@@ -60,10 +63,19 @@ class Asteroid extends Floater {
 	public void takeDamage(double damage) {
 		if (millis() > dmgCooldownUntil) {
 			dmgCooldownUntil = millis() + dmgCooldown;
+			double scale = 1 - (damage / hp * 0.2);
+			
 			hp -= damage;
 			println("DAMAGE Taken!");
 			if (hp <= 0)
 				isDead = true;
+			
+			if (super.sizeX * scale < 50)
+				return;
+			
+			super.sizeX = super.sizeX * scale;
+			super.sizeY = super.sizeY * scale;
+			collisionDetectionDistance = (super.sizeX+super.sizeY) / 4	// half of the size (Radius)
 		}
 	}
 	
