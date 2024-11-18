@@ -16,7 +16,7 @@ class Asteroid extends Floater {
 	public double hpMax;
 
 	public Asteroid() {
-		super(0, 0, 100, 76, 0, 0, "data/game_asteroid_a.png");
+		super(0, 0, 100, 76, 0, 0, "assets/images/game_asteroid_a.png");
 		
 		switch ((int)random(3)) {
 			case 0:

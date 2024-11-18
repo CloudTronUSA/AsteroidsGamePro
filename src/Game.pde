@@ -1,8 +1,5 @@
 // Game
 
-// preload image assets
-/* @pjs preload="data/game_player_spaceship.png"; */
-
 class Game {
 	public Player player;
 	public Input input;
@@ -16,7 +13,7 @@ class Game {
 	
 	public Game() {
 		input = new Input();
-		player = new Player(500f, 500f, 96, 96, "data/game_player_spaceship.png");
+		player = new Player(500f, 500f, 96, 96, "assets/images/game_player_spaceship.png");
 		gameUI = new GameUI(player.hp);
 		gameBackground = new Background();
 	}

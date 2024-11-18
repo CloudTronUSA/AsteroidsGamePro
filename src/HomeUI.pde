@@ -17,16 +17,16 @@ class HomeUI {
 	
 	public HomeUI() {
 		// initiate the ui
-		bg_img = loadImage("data/homeui_background_image.png");
+		bg_img = loadImage("assets/images/homeui_background_image.png");
 		
 		// load the buttons
-		startButton = new Button(30, 30, 600, 200, "data/homeui_start_button.png", "data/homeui_start_button_hover.png");
-		forgeButton = new Button(30, 260, 260, 430, "data/homeui_forge_button.png", "data/homeui_forge_button_hover.png");
-		characterButton = new Button(320, 260, 310, 200, "data/homeui_character_button.png", "data/homeui_character_button_hover.png");
-		settingsButton = new Button(320, 490, 310, 200, "data/homeui_settings_button.png", "data/homeui_settings_button_hover.png");
+		startButton = new Button(30, 30, 600, 200, "assets/images/homeui_start_button.png", "assets/images/homeui_start_button_hover.png");
+		forgeButton = new Button(30, 260, 260, 430, "assets/images/homeui_forge_button.png", "assets/images/homeui_forge_button_hover.png");
+		characterButton = new Button(320, 260, 310, 200, "assets/images/homeui_character_button.png", "assets/images/homeui_character_button_hover.png");
+		settingsButton = new Button(320, 490, 310, 200, "assets/images/homeui_settings_button.png", "assets/images/homeui_settings_button_hover.png");
 		
-		characterImage = new UiImage(640, 30, 629, 716, "data/homeui_character_default_idle.png");
-		featureUnavailableText = new UiImage(990, 20, 216, 93, "data/homeui_feature_unavailable.png");
+		characterImage = new UiImage(640, 30, 629, 716, "assets/images/homeui_character_default_idle.png");
+		featureUnavailableText = new UiImage(990, 20, 216, 93, "assets/images/homeui_feature_unavailable.png");
 	}
 	
 	public void display() {

@@ -1,5 +1,5 @@
 // preload ALL assets that are necessary to boot (must be in one line)
-/* @pjs preload="data/homeui_background_image.png"; font="data/PixelifySans-Regular.ttf, data/PixelifySans-Bold.ttf" */
+/* @pjs preload="assets/images/homeui_background_image.png"; font="assets/fonts/PixelifySans-Regular.ttf, assets/fonts/PixelifySans-Bold.ttf" */
 
 // Main Class
 

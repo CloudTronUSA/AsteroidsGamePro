@@ -13,8 +13,8 @@ class GameUI {
 	public double reachTScoreInFrames = 5;	// displayed score should be target score in this many frames
 	
 	public GameUI(int initPlayerHP) {
-		fontLarge = createFont("data/PixelifySans-Bold.ttf", 64);
-		fontMedium = createFont("data/PixelifySans-Bold.ttf", 48);
+		fontLarge = createFont("assets/fonts/PixelifySans-Bold.ttf", 64);
+		fontMedium = createFont("assets/fonts/PixelifySans-Bold.ttf", 48);
 	}
 
 	private String zfill(int number, int targetDigits) {

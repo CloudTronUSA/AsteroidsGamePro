@@ -5,7 +5,7 @@ class Bullet extends Floater {
 	private double movementPerTickY;
 
 	public Bullet(Player player) {
-		super(player.posX, player.posY, 16, 44, player.direction, player.direction, "data/game_effect_bullet.png")
+		super(player.posX, player.posY, 16, 44, player.direction, player.direction, "assets/images/game_effect_bullet.png")
 		
 		movementPerTickX = speed * sin(radians(super.direction));
 		movementPerTickY = -speed * cos(radians(super.direction));
