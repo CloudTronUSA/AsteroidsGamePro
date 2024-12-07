@@ -1,85 +1,130 @@
-// player class extending from floater
+// player class extending from entity class
+// handles player specific attributes and methods
 
-class Player extends Floater {
-	public double speed = 8;
-	public double damage = 80;
-	public double maxHp = 400;
-	public double maxEnergy = 100;
+final class Player extends Entity {
+	private double energy;
+    private double maxEnergy;
 
-	public double hp = maxHp;
-	public double energy = maxEnergy;
-	public boolean isDead = false;
+    private double hpRegenRate;
+	private double energyRechargeRate;
+    private double ultAttackCost;
+    private double ultAttackMultiplier;
+    private double ultAttackRange;
 
-	public double dmgCooldown = 200;	// how long the cooldown will be 
-	private double dmgCooldownUntil = 0;
+    private int ultAtkCooldown;
+    private int ultAttackCooldownTimer; // ms
 
-	public double atkCooldown = 100;	// how long the cooldown will be
-	public double atkCooldownUntil = 0;
+    private int damageTakenFlashLength;
+    private int damageTakenFlashTimer;
 
-	public double energyRechargeRate = 0.1; // how much ER per frame
-	public double ultAttackCost = 24; // how much energy the ult atk cost
-	public double ultAtkCooldown = 500;	// how long the cooldown will be
-	public double ultAtkCooldownUntil = 0;
-
-	public double collisionDetectionDistance;
+    private boolean rotationLock;   // lock rotation to mouse
+    private boolean xMovementLock;  // lock movement in x-axis
+    private boolean yMovementLock;  // lock movement in y-axis
 	
-	public Player(double posXInp, double posYInp, int sizeXInp, int sizeYInp, String imagePath) {
-		super(posXInp, posYInp, sizeXInp, sizeYInp, imagePath);
-		
-		collisionDetectionDistance = (super.sizeX+super.sizeY) / 4	// half of the size (Radius)
+	public Player(double initPosX, double initPosY) {
+		super(
+            initPosX, initPosY, // pos
+            96, 96, // size
+            0,  // rotation
+            "assets/images/game_player_spaceship.png", // image path
+            3.2,  // speed
+            1000,    // max health
+            20  // damage
+        );
+
+        maxEnergy = 100;    // default: 100
+        energy = maxEnergy;
+        energyRechargeRate = 1; // default: 1 energy per tick
+        hpRegenRate = 0.1;  // default: 0.5 hp per tick
+
+        ultAttackCost = 100; // default: 50 energy
+        ultAttackMultiplier = 5; // default: 5x damage
+        ultAttackRange = 400; // default: 400
+        ultAtkCooldown = 1000;  // default: 1000 ms
+        ultAttackCooldownTimer = 0;
+
+        damageTakenFlashLength = 80;
+        damageTakenFlashTimer = 0;
+
+        takeDamageCooldown = 200;   // increase the cooldown for player
 	}
 	
-	public double getRelativeAngleToMouse() {
-  	double deltaX = mouseX - super.posX;
-  	double deltaY = mouseY - super.posY;
-  
-  	// using atan2 function and convert to degrees
-  	double angle = atan2(deltaY, deltaX) * (180 / PI);
+    // get the angle between player and mouse
+	private double getRelativeAngleToMouse() {
+        double deltaX = mouseX - transform.x;
+        double deltaY = mouseY - transform.y;
+    
+        // using atan2 function and convert to degrees
+        double angle = atan2((float)deltaY, (float)deltaX) * (180 / PI);
 		angle += 90;
+
+        if (rotationLock) {
+            // cap the angle to upwards only
+            angle = 0;
+        }
 		
 		return angle;
 	}
 
-	public void takeDamage(double damage) {
-		if (millis() > dmgCooldownUntil) {
-			dmgCooldownUntil = millis() + dmgCooldown;
-			
-			hp -= damage;
-			//println("PLAYER DAMAGE Taken!");
-			if (hp <= 0) {
-				hp = 0;
-				isDead = true;
-			}
-		}
-	}
+    // expect a list of entities to check for collision
+	public double ultAttack(ArrayList<Entity> entities) {
+        double totalDamageDealt = 0;
+        if (energy >= ultAttackCost && millis() > ultAttackCooldownTimer) {
+            energy -= ultAttackCost;
+            ultAttackCooldownTimer = millis() + ultAtkCooldown;
+            
+            // do ult attack
+            double thisAtkDamage = damage * ultAttackMultiplier;
+            
+            // check each entity to see if it is within range
+            for (int i=0; i<entities.size(); i++) {
+                Entity entity = entities.get(i);
+                double distance = dist(
+                    (float)transform.x, (float)transform.y,
+                    (float)entity.getTransform().x, (float)entity.getTransform().y
+                );
+                if (distance <= ultAttackRange) {
+                    totalDamageDealt += entity.takeDamage(thisAtkDamage);
+                }
+            }
+        }
+        return totalDamageDealt;
+    }
 
-	public void approveAttack() {
-		if (millis() > atkCooldownUntil) {
-			atkCooldownUntil = millis() + atkCooldown;
-			return true;
-		}
-		return false;
-	}
+    // modified attack for player (launch a bullet)
+    public boolean attack(ArrayList<Bullet> bullets) {
+        if (millis() > attackCooldownTimer) {
+            attackCooldownTimer = millis() + attackCooldown;
+            // create a bullet
+            bullets.add(new Bullet(this));
+        }
+    }
 
-	public void approveUltAttack() {
-		if (millis() > ultAtkCooldownUntil && energy - ultAttackCost >= 0) {
-			ultAtkCooldownUntil = millis() + ultAtkCooldown;
-			energy -= ultAttackCost;
-			return true;
+    // modified takeDamage for player
+    public double takeDamage(double damage) {
+        double dmgTaken = super.takeDamage(damage);
+        if (dmgTaken > 0) {
+            damageTakenFlashTimer = millis() + damageTakenFlashLength;
+        }
+        return dmgTaken;
+    }
+
+    protected void draw() {
+        if (millis() < damageTakenFlashTimer) {
+			tint(255, 180, 180);
 		}
-		return false;
-	}
+		super.draw();
+		noTint();
+    }
 	
-	public void updatePlayer(double inputXAxis, double inputYAxis) {
+	public void update(double inputXAxis, double inputYAxis) {
 		// direction control: Mode1: always face mouse
-		super.rotation = this.getRelativeAngleToMouse();
-		super.direction = this.getRelativeAngleToMouse();
+		transform.rotation = this.getRelativeAngleToMouse();
 		
 		// direction control: Mode2: from control
 		//if (inputXAxis != 0 || inputYAxis != 0) {
 		//	double angleTheta = atan2(inputXAxis, inputYAxis) * (180 / PI);
-		//	super.rotation = (angleTheta) % 360;
-		//	super.direction = (angleTheta) % 360;
+		//	transform.rotation = (angleTheta) % 360;
 		//}
 		
 		// move towards mouse
@@ -88,19 +133,39 @@ class Player extends Floater {
 		// double vectorDirM = sqrt(vectorDirX*vectorDirX + vectorDirY*vectorDirY);	// normalize
 		// vectorDirX = vectorDirX / vectorDirM;
 		// vectorDirY = vectorDirY / vectorDirM;
-		//super.fTranslate(vectorDirX*speed*inputYAxis, vectorDirY*speed*inputYAxis, true);
+		// move(vectorDirX*inputYAxis, vectorDirY*inputYAxis);
 		
 		// move by key
-		super.fTranslate(speed*inputXAxis, speed*inputYAxis*-1, true);
+        if (xMovementLock) {
+            inputXAxis = 0;
+        }
+        if (yMovementLock) {
+            inputYAxis = 0;
+        }
+
+		move(inputXAxis, inputYAxis*-1);
 		
+        // energy recharge
 		if (energy + energyRechargeRate <= maxEnergy)
 			energy += energyRechargeRate;
-		
-		if (millis() < dmgCooldownUntil) {
-			tint(255, (int)(150));
-			//println("Player TINT!");
-		}
-		super.update();
-		noTint();
+
+        // hp regen
+        if (health > 0 && health + hpRegenRate <= maxHealth)    // only regen if not dead
+            health += hpRegenRate;
+
+        // draw player
+        this.draw();
 	}
+
+    // getter methods
+    public double getEnergy() {return energy;}
+    public double getMaxEnergy() {return maxEnergy;}
+    public double getDamage() {return damage;}
+    public double getHealth() {return health;}
+    public double getMaxHealth() {return maxHealth;}
+
+    // setter methods
+    public void setRotationLock(boolean lock) {rotationLock = lock;}
+    public void setXMovementLock(boolean lock) {xMovementLock = lock;}
+    public void setYMovementLock(boolean lock) {yMovementLock = lock;}
 } 

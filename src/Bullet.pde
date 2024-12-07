@@ -1,19 +1,26 @@
-class Bullet extends Floater {
-	public double speed = 24;
+// bullet class
 
-	private double movementPerTickX;
-	private double movementPerTickY;
+class Bullet extends Entity {
+	private double[] movement;
 
 	public Bullet(Player player) {
-		super(player.posX, player.posY, 16, 44, player.direction, player.direction, "assets/images/game_effect_bullet.png")
+		super(
+            player.getTransform().x, player.getTransform().y, // pos
+            16, 44, // size
+            player.getTransform().rotation,   // rotation
+            "assets/images/game_effect_bullet.png",  // image path
+            20,  // speed
+            1,    // max health
+            player.getDamage()  // damage
+        );
 		
-		movementPerTickX = speed * sin(radians(super.direction));
-		movementPerTickY = -speed * cos(radians(super.direction));
+		double movementPerTickX = sin(radians((float)transform.rotation));
+		double movementPerTickY = -1 * cos(radians((float)transform.rotation));
+        movement = new double[] {movementPerTickX, movementPerTickY};
 	}
-	
-	public void updateBullet() {
-		super.fTranslate(movementPerTickX, movementPerTickY, false);
-		
-		super.update();
-	}
+
+	public void update() {
+        move(movement[0], movement[1], false);
+        super.draw();
+    }
 }

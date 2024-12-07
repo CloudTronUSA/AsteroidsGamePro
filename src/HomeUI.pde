@@ -75,8 +75,8 @@ class Button {
 	private int sizeX;
 	private int sizeY;
 	
-	private int[2] clickableRangeX = new int[2];	// clickable range x1 x2
-	private int[2] clickableRangeY = new int[2];	// clickable range y1 y2
+    private int[] clickableRangeX = new int[2];	// clickable range x1 x2
+	private int[] clickableRangeY = new int[2];	// clickable range y1 y2
 	
 	//private boolean isMouseHovering = false;
 	

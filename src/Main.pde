@@ -6,27 +6,29 @@
 HomeUI homeUi;
 Game game;
 
-int gameState = 0;	// 0 = ui, 1 = play
-int targetFPS = 60;	// target fps
+int gameState;
 
 public void setup(){
-  size(1280, 720);
-	frameRate(targetFPS);
+    size(1280, 720);
+	frameRate(60);
   
 	homeui = new HomeUI();
 	game = new Game();
+    gameState = 0;
 	
 	homeui.display();	// display home ui
+    homeui.shouldStartGame = true;
 }
 
 public void draw(){
 	if (homeui.shouldStartGame){
 		gameState = 1;
+        game = new Game();
 		homeui.shouldStartGame = false;
 	}
 	
-	if (game.isGameOver) {
-		game = new Game();
+	if (game.getGameState() == 3) {
+		// game = new Game();
 		gameState = 0;
 	}
 
