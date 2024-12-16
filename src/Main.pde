@@ -17,7 +17,7 @@ public void setup(){
     gameState = 0;
 	
 	homeui.display();	// display home ui
-    homeui.shouldStartGame = true;
+    //homeui.shouldStartGame = true;
 }
 
 public void draw(){

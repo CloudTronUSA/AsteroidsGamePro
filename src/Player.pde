@@ -14,6 +14,10 @@ final class Player extends Entity {
     private int ultAtkCooldown;
     private int ultAttackCooldownTimer; // ms
 
+    private int abilityCost;
+    private int abilityCooldown; // ms
+    private int abilityCooldownTimer; // ms
+
     private int damageTakenFlashLength;
     private int damageTakenFlashTimer;
 
@@ -47,7 +51,11 @@ final class Player extends Entity {
         damageTakenFlashTimer = 0;
 
         takeDamageCooldown = 200;   // increase the cooldown for player
-	}
+
+        abilityCost = 50; // default: 50 energy
+        abilityCooldown = 1000; // default: 1000 ms
+        abilityCooldownTimer = 0;
+    }
 	
     // get the angle between player and mouse
 	private double getRelativeAngleToMouse() {
@@ -65,6 +73,18 @@ final class Player extends Entity {
 		
 		return angle;
 	}
+
+    // ability
+    public void hyperspaceAbility() {
+        if (energy >= abilityCost && millis() > abilityCooldownTimer) {
+            energy -= abilityCost;
+            abilityCooldownTimer = millis() + abilityCooldown;
+            // teleport to a random location
+            transform.x = random(0, width);
+            transform.y = random(0, height);
+            takeDamageCooldownTimer = millis() + 1000; // invulnerable for 1s
+        }
+    }
 
     // expect a list of entities to check for collision
 	public double ultAttack(ArrayList<Entity> entities) {

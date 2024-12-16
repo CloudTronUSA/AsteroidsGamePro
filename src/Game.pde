@@ -286,6 +286,10 @@ class Game {
 		if (key == 'q') {
 			executePlayerUltAtk();
 		}
+
+        if (key == 't') {
+            player.hyperspaceAbility();
+        }
 	}
 	
 	public void onKeyReleased() {
