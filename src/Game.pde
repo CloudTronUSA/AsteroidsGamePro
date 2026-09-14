@@ -264,7 +264,7 @@ class Game {
         player.update(input.xAxis, input.yAxis);
 
 		// draw ui overlay
-		gameUI.update(score, player);
+		gameUI.update(score);
 		
 		// draw border for debug purpose
 		fill(0, 0);

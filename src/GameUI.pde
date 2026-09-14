@@ -10,7 +10,7 @@ class GameUI {
 	private PFont fontMedium;
     private PFont fontSmall;
 	
-	private double reachTScoreInFrame; // displayed score should be target score in this many frames
+	private double reachTScoreInFrames; // displayed score should be target score in this many frames
 	
     private Game game;
     private Player player;
@@ -30,7 +30,7 @@ class GameUI {
 	}
 
 	private String zfill(int number, int targetDigits) {
-        String numStr = number.toString();
+        String numStr = String.valueOf(number);
         String zeros = "";
         if (numStr.length() < targetDigits) {
             for (int i=0; i<(targetDigits-numStr.length()); i++) {
@@ -65,7 +65,7 @@ class GameUI {
 		text("HP", 15, 650);
 		
 		noStroke();
-		int hpBarLength = maxHpBarLength * (player.getHealth() / player.getMaxHealth());
+		int hpBarLength = (int) (maxHpBarLength * (player.getHealth() / player.getMaxHealth()));
 		rect(85, 625, hpBarLength, 20);	// hp
 		
 		stroke(217, 51, 15);	// border
@@ -80,7 +80,7 @@ class GameUI {
 		text("EN", 15, 700);
 		
 		noStroke();
-		int enBarLength = maxEnergyBarLength * (player.getEnergy() / player.getMaxEnergy());
+		int enBarLength = (int) (maxEnergyBarLength * (player.getEnergy() / player.getMaxEnergy()));
 		rect(85, 675, enBarLength, 20);	// energy
 		
 		stroke(2, 185, 243);	// border

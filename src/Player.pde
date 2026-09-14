@@ -112,7 +112,7 @@ final class Player extends Entity {
     }
 
     // modified attack for player (launch a bullet)
-    public boolean attack(ArrayList<Bullet> bullets) {
+    public void attack(ArrayList<Bullet> bullets) {
         if (millis() > attackCooldownTimer) {
             attackCooldownTimer = millis() + attackCooldown;
             // create a bullet

@@ -12,19 +12,19 @@ public void setup(){
     size(1280, 720);
 	frameRate(60);
   
-	homeui = new HomeUI();
+	homeUi = new HomeUI();
 	game = new Game();
     gameState = 0;
 	
-	homeui.display();	// display home ui
-    //homeui.shouldStartGame = true;
+	homeUi.display();	// display home ui
+    //homeUi.shouldStartGame = true;
 }
 
 public void draw(){
-	if (homeui.shouldStartGame){
+	if (homeUi.shouldStartGame){
 		gameState = 1;
         game = new Game();
-		homeui.shouldStartGame = false;
+		homeUi.shouldStartGame = false;
 	}
 	
 	if (game.getGameState() == 3) {
@@ -34,7 +34,7 @@ public void draw(){
 
 	switch (gameState) {
 		case 0:
-			homeui.update();
+			homeUi.update();
 			break;
 		case 1:
 			game.update();
@@ -47,7 +47,7 @@ public void draw(){
 void mouseClicked() {
 	switch (gameState) {
 		case 0:
-			homeui.onMouseClick();
+			homeUi.onMouseClick();
 			break;
 		case 1:
 			// in game, fire bullets

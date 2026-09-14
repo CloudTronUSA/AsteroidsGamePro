@@ -35,6 +35,7 @@ class HomeUI {
 	
 	public void update() {
 		background(bg_img);
+
 		// update elements
 		startButton.update();
 		forgeButton.update();
