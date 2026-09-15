@@ -32,8 +32,8 @@ final class Player extends Entity {
             0,  // rotation
             "assets/images/game_player_spaceship.png", // image path
             3.2,  // speed
-            1000,    // max health
-            20  // damage
+            100,    // max health
+            40  // damage
         );
 
         maxEnergy = 100;    // default: 100
