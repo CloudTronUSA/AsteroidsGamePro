@@ -1,7 +1,7 @@
 // dynamic background with stars
 
 class Background {
-    private ArrayList stars;
+    private ArrayList<Star> stars;
     private int summonAttempts;
     private int summonDistanceLimit;
     private double starScrollSpeed;
