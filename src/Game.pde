@@ -11,13 +11,11 @@ class Game {
     private ArrayList <Entity> enemies;
 
 	private int score;
-	private boolean gameOver;
     private int gameState;  // 0: ongoing, 1: pre-summary animation, 2: summary, 3: post-summary (game over)
     
     private int gameStage;  // 0: normal, 1: scroll, 2: boss
     private int timeElapsedStage;
     private int timeElapsed;
-    private boolean stageShifting;  // flag to indicate stage is shifting
 
     private AnimController animController;
 
@@ -37,7 +35,6 @@ class Game {
         gameStage = 0;
         timeElapsedStage = 0;
         timeElapsed = 0;
-        stageShifting = false;
 	}
 
     // prep for pre-summary animation
@@ -88,64 +85,6 @@ class Game {
         if (summaryUI.isDone()) {
             gameState = 3;  // set to enter post-summary (game over)
         }
-    }
-
-    // prep for stage change
-    private void prepStageChange(int targetStage) {
-        // modify the game according to the stage
-        if (targetStage == 0) {   // normal stage
-            gameBackground.setStarScrollSpeed(1);
-            player.setRotationLock(false);
-            player.setYMovementLock(false);
-
-        } else if (targetStage == 1) {    // scroll stage
-            // background scroll faster
-            gameBackground.setStarScrollSpeed(2);
-
-            // lock player Y movement & rotation
-            Transform playerTransform = player.getTransform();
-            playerTransform.y = height * 0.75;
-            player.setTransform(playerTransform);
-            player.setRotationLock(true);
-            player.setYMovementLock(true);
-
-        } else if (targetStage == 2) { // boss stage
-            gameBackground.setStarScrollSpeed(0.5);
-            player.setRotationLock(false);    // unlock player rotation
-        }
-
-        // setup stage change animation
-        Transform playerTransform = player.getTransform();
-        Keyframe[] keyframes = new Keyframe[4];
-
-        // always one keyframe for start and end
-        keyframes[0] = new Keyframe(player, playerTransform.x, playerTransform.y, playerTransform.w, playerTransform.h, playerTransform.rotation, 0);
-        keyframes[1] = new Keyframe(player, playerTransform.x, playerTransform.y, playerTransform.w, playerTransform.h, playerTransform.rotation, 10);
-        keyframes[2] = new Keyframe(player, width/2, height*0.75, playerTransform.w, playerTransform.h, 0, 40);
-        keyframes[3] = new Keyframe(player, width/2, height*0.75, playerTransform.w, playerTransform.h, 0, 60);
-        
-        animController = new AnimController();
-        animController.addKeyframes(keyframes);
-
-        // modify all enemies so they go downwards
-        for (int i=0; i<enemies.size(); i++) {
-            Entity enemy = enemies.get(i);
-            if (enemy instanceof Asteroid) {
-                Asteroid asteroid = (Asteroid) enemy;
-                asteroid.setDirection(90);
-                asteroid.setSpeed(10);
-            }
-        }
-
-        stageShifting = true;
-        gameStage = targetStage;
-    }
-
-    // do stage change
-    private void updateStageChange() {
-        stageShifting = true;
-        gameBackground.setStarScrollSpeed(0);    // stop the background scrolling
-        gameState = 1;  // set to enter pre-summary animation
     }
 
     // normal game update

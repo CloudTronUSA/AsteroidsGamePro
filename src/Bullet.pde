@@ -9,7 +9,7 @@ class Bullet extends Entity {
             16, 44, // size
             player.getTransform().rotation,   // rotation
             "assets/images/game_effect_bullet.png",  // image path
-            20,  // speed
+            40,  // speed
             1,    // max health
             player.getDamage()  // damage
         );
