@@ -1,24 +1,227 @@
-<!DOCTYPE html>
-	<head>
-		<meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>Starlight v24.11.18b</title>
-		<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-		<link rel="stylesheet" href="styles.css">
-		<script src="lprocessing.js"></script>
-	</head>
-	<body>
-		<header>
-			<h1>Starlight v24.11.18b</h1>
-		</header>
-			<section id="content">
-				<canvas id="AsteroidsGame" data-processing-sources="src/Main.pde src/Input.pde src/AnimController.pde src/Game.pde src/HomeUI.pde src/GameUI.pde src/SummaryUI.pde src/Background.pde src/Sprite.pde src/Entity.pde src/Player.pde src/Bullet.pde src/Asteroid.pde">
-				</canvas>
-		    </section>
-	    <footer>
-            WASD to Move | Space to Shoot | Q to do Ult Attack | T to Hyperspace<br>
-            Made with LProcessing.js | Live2D (Experimental & Highly Modified Framework, Expect Bugs)<br>
-		    Code & Game Designed by CloudTron | Art & Character Design by GuaXiXi | CloudTron Studios 2024
-	    </footer>
-	</body>
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>AsteroidsGamePro</title>
+	<style>
+		:root {
+			color-scheme: light dark;
+			--page-background: #f3f3f3;
+			--page-foreground: #1f1f1f;
+			--muted-foreground: rgba(31, 31, 31, .6);
+			--border-color: rgba(31, 31, 31, .14);
+			--console-background: rgba(0, 0, 0, .05);
+			--hover-background: rgba(31, 31, 31, .08);
+			--error-background: #fff0f0;
+			--error-border: #d12f2f;
+			font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+		}
+		@media (prefers-color-scheme: dark) {
+			:root {
+				--page-background: #151515;
+				--page-foreground: #f5f5f5;
+				--muted-foreground: rgba(255, 255, 255, .6);
+				--border-color: rgba(255, 255, 255, .12);
+				--console-background: rgba(0, 0, 0, .35);
+				--hover-background: rgba(255, 255, 255, .1);
+				--error-background: #4d1111;
+				--error-border: #a33;
+			}
+		}
+		* { box-sizing: border-box; }
+		body {
+			margin: 0;
+			height: 100vh;
+			height: 100dvh;
+			overflow: hidden;
+			display: grid;
+			grid-template-rows: auto minmax(0, 1fr);
+			background: var(--page-background);
+			color: var(--page-foreground);
+		}
+		header {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+			padding: 10px 16px;
+			border-bottom: 1px solid var(--border-color);
+		}
+		h1 {
+			margin: 0;
+			font-size: 17px;
+			font-weight: 600;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+		.by {
+			color: var(--muted-foreground);
+			font-size: 13px;
+			white-space: nowrap;
+		}
+		.spacer { flex: 1; }
+		.icon-button {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			width: 30px;
+			height: 30px;
+			padding: 0;
+			border: 0;
+			border-radius: 6px;
+			background: transparent;
+			color: inherit;
+			cursor: pointer;
+		}
+		.icon-button:hover { background: var(--hover-background); }
+		.icon-button[aria-pressed="true"] { background: var(--hover-background); }
+		.icon-button svg { width: 17px; height: 17px; fill: currentColor; }
+		main {
+			display: grid;
+			grid-template-rows: minmax(0, 1fr) auto auto;
+			min-height: 0;
+		}
+		#stage {
+			position: relative;
+			display: grid;
+			place-items: center;
+			min-height: 0;
+			overflow: hidden;
+			padding: 10px;
+		}
+		#sketch { line-height: 0; }
+		canvas { display: block; }
+		#console {
+			margin: 0;
+			padding: 8px 16px;
+			/* three lines, then scroll */
+			max-height: calc(3 * 1.45em + 20px);
+			overflow: auto;
+			white-space: pre-wrap;
+			background: var(--console-background);
+			border-top: 1px solid var(--border-color);
+			font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+		}
+		#error {
+			margin: 0;
+			padding: 10px 16px;
+			white-space: pre-wrap;
+			background: var(--error-background);
+			border-top: 1px solid var(--error-border);
+			font: 12px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+		}
+		dialog#info {
+			width: min(560px, 92vw);
+			min-height: min(320px, 70vh);
+			max-height: 86vh;
+			padding: 28px 30px;
+			border: 1px solid var(--border-color);
+			border-radius: 14px;
+			background: var(--page-background);
+			color: var(--page-foreground);
+			box-shadow: 0 24px 60px rgba(0, 0, 0, .35);
+		}
+		dialog#info[open] {
+			display: flex;
+			flex-direction: column;
+			animation: dialog-in .2s cubic-bezier(.2, .7, .3, 1) both;
+		}
+		dialog#info[open]::backdrop { animation: backdrop-in .2s ease-out both; }
+		dialog#info.closing { animation: dialog-out .14s ease-in both; }
+		dialog#info.closing::backdrop { animation: backdrop-in .14s ease-in reverse both; }
+		dialog#info::backdrop { background: rgba(0, 0, 0, .45); }
+		dialog#info h2 { margin: 0; font-size: 22px; }
+		@keyframes dialog-in {
+			from { opacity: 0; transform: translateY(12px) scale(.96); }
+			to { opacity: 1; transform: translateY(0) scale(1); }
+		}
+		@keyframes dialog-out {
+			to { opacity: 0; transform: translateY(8px) scale(.98); }
+		}
+		@keyframes backdrop-in {
+			from { opacity: 0; }
+			to { opacity: 1; }
+		}
+		dialog#info .by { display: block; margin-top: 2px; }
+		dialog#info p { margin: 18px 0 0; line-height: 1.6; white-space: pre-wrap; }
+		dialog#info .description { flex: 1; }
+		dialog#info .made {
+			margin-top: 20px;
+			padding-top: 12px;
+			border-top: 1px solid var(--border-color);
+			color: var(--muted-foreground);
+			font-size: 13px;
+		}
+		dialog#info a { color: inherit; }
+		#boot {
+			position: absolute;
+			inset: 0;
+			z-index: 2;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background: #000;
+			color: #fff;
+		}
+		#boot.done { animation: boot-out .2s ease-in forwards; }
+		#boot svg { width: 46px; height: 46px; flex: none; animation: boot-logo .34s ease-out both; }
+		#boot .wordmark {
+			/* Expands to the right, which pushes the logo left into its final position. */
+			overflow: hidden;
+			white-space: nowrap;
+			font-size: 23px;
+			font-weight: 600;
+			animation: boot-wordmark .46s cubic-bezier(.2, .7, .3, 1) .34s both;
+		}
+		@keyframes boot-logo {
+			from { opacity: 0; transform: scale(.9); }
+			to { opacity: 1; transform: scale(1); }
+		}
+		@keyframes boot-wordmark {
+			from { max-width: 0; opacity: 0; padding-left: 0; }
+			to { max-width: 320px; opacity: 1; padding-left: 14px; }
+		}
+		@keyframes boot-out {
+			to { opacity: 0; visibility: hidden; }
+		}
+		@media (prefers-reduced-motion: reduce) {
+			#boot svg, #boot .wordmark { animation-duration: .01s; animation-delay: 0s; }
+		}
+	</style>
+	<meta name="webprocessing-export" content="Built by Web Processing 10.0.0.">
+</head>
+<body>
+	<header>
+		<h1>AsteroidsGamePro</h1>
+		<span class="by">by CloudTronUSA</span>
+		<span class="spacer"></span>
+		<button id="toggleConsole" class="icon-button" type="button" aria-pressed="false" title="Console" aria-label="Console">
+			<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 2h13A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 0 12.5v-9A1.5 1.5 0 0 1 1.5 2Zm0 1.5v9h13v-9h-13Zm2 1.94 1.06-1.06 2.47 2.47-2.47 2.47L3.5 8.25 4.81 6.94 3.5 5.44ZM8 9.5h4.5V11H8V9.5Z"/></svg>
+		</button>
+		<button id="showInfo" class="icon-button" type="button" title="About" aria-label="About">
+			<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1Zm0 1.5A5.5 5.5 0 1 1 8 13.5 5.5 5.5 0 0 1 8 2.5Zm-.75 2h1.5V6h-1.5V4.5Zm0 2.75h1.5v4.25h-1.5V7.25Z"/></svg>
+		</button>
+	</header>
+	<main>
+		<div id="stage">
+			<div id="sketch"></div>
+			<div id="boot">
+				<svg viewBox="10 -10 710 690" aria-hidden="true" fill="none"><path d="M400 500C700 500 700 100 400 100" stroke="#fff" stroke-width="150" fill="none"/><path d="M400 200L100 600" stroke="#fff" stroke-width="150" fill="none"/><path d="M100 300L200 500" stroke="#fff" stroke-width="150" fill="none"/></svg>
+				<span class="wordmark">VS Processing</span>
+			</div>
+		</div>
+		<pre id="console" hidden></pre>
+		<pre id="error" hidden></pre>
+	</main>
+	<dialog id="info">
+		<h2>AsteroidsGamePro</h2>
+		<span class="by">by CloudTronUSA</span>
+		<p class="description">WASD to Move; Space to Shoot; Q to do Ult Attack; T to Hyperspace;
+Code &amp; Game Designed by CloudTron
+Art &amp; Character Design by GuaXiXi</p>
+		<p class="made">Made with <a href="https://vsp.cloudtron.us" target="_blank" rel="noreferrer noopener">VS Processing</a></p>
+	</dialog>
+	<script type="module" src="./runtime.js"></script>
+</body>
 </html>
